@@ -1,0 +1,4 @@
+condition_test,n_eval_seeds,mean_endpoint_error,sd_over_eval_seeds
+correct_goal,3,0.036374459664026894,0.0014912460881475287
+permuted_vs_requested,3,0.8067576090494791,0.02132020413302889
+permuted_vs_supplied,3,0.03622422367334366,0.0013247840226065218

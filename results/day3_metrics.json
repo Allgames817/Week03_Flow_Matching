@@ -1,0 +1,19 @@
+{
+  "seed": 42,
+  "device": "cuda",
+  "python": "3.10.21",
+  "torch": "2.1.2+cu121",
+  "numpy": "1.26.4",
+  "train_steps": 5000,
+  "sample_steps": 100,
+  "solver": "Euler",
+  "nfe_per_generation": 100,
+  "n_samples": 2000,
+  "validation_examples": 4096,
+  "validation_mse_before": 1.516425371170044,
+  "validation_mse_after": 1.0018527507781982,
+  "mean_first_100_train_losses": 1.2505944818258286,
+  "mean_last_100_train_losses": 0.9954151791334153,
+  "train_loop_wall_seconds": 9.576082600000518,
+  "notes": "Numerical checks passed. Inspect generated plots for learning quality; this is not a robot-policy benchmark. Timing is not a controlled speed comparison."
+}

@@ -1,0 +1,13 @@
+{
+  "train_steps": 5000,
+  "batch_size": 256,
+  "hidden_dim": 128,
+  "lr": 0.001,
+  "data_noise": 0.08,
+  "sample_steps": 100,
+  "n_samples": 2000,
+  "seed": 42,
+  "device": "auto",
+  "output_dir": "outputs/day3",
+  "log_every": 500
+}

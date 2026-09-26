@@ -1,0 +1,35 @@
+{
+  "mode": "day3_checkpoint_reuse",
+  "status": "passed",
+  "seed": 42,
+  "checkpoint_sha256": "9da3ab2bf6a2aa623da6d2d5ff056b2b0cd4de332df581c1d6d55f648ce6f189",
+  "assumed_model": "Day 3 VelocityMLP: three SiLU hidden layers, input [xt, t]",
+  "package": {
+    "python": "3.10.21",
+    "torch": "2.1.2+cu121",
+    "numpy": "1.26.4",
+    "flow_matching": "1.0.10",
+    "torchdiffeq": "0.2.5",
+    "device": "cuda"
+  },
+  "path": {
+    "(4, 2)": {"state_max_abs_diff": 0.0, "velocity_max_abs_diff": 0.0},
+    "(4, 16, 2)": {"state_max_abs_diff": 0.0, "velocity_max_abs_diff": 0.0}
+  },
+  "training_one_adam_step_on_copies": {
+    "loss_max_abs_diff": 0.0,
+    "gradient_max_abs_diff": 0.0,
+    "updated_parameter_max_abs_diff": 0.0,
+    "disposable_copy_parameter_change": 0.0010000169277191162,
+    "original_model_unchanged": true,
+    "input_checkpoint_unchanged": true
+  },
+  "sampling": {
+    "steps": 100,
+    "n_samples": 2000,
+    "official_nfe": 100,
+    "same_grid_trajectory_max_abs_diff": 0.0,
+    "same_grid_endpoint_rmse": 0.0,
+    "original_day3_constant_dt_endpoint_max_abs_diff": 1.5497207641601562e-06
+  }
+}

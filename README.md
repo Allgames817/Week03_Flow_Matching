@@ -6,8 +6,6 @@ Research note for VLA Roadmap Week 3. Numbers come from a local two-moons Flow M
 
 Chinese week conclusion: [`results/CONCLUSION_zh.md`](results/CONCLUSION_zh.md).
 
-Week 1: [Allgames817/Week01_ACT](https://github.com/Allgames817/Week01_ACT). Week 2: [Allgames817/Week02_Diffusion_Policy](https://github.com/Allgames817/Week02_Diffusion_Policy).
-
 ---
 
 ## 1. Goal
@@ -186,6 +184,10 @@ Validation CFM MSE on a fixed 2048-example batch: **2.285278 → 0.299415**.
 | Same shifted output | the goal actually fed in | **0.036224** |
 
 The second error is about **22.18×** the first. The third returns to the first. That supports “the output follows the supplied goal,” which is stronger than “scrambling the condition breaks the model.” It is an input intervention on one conditional model, not a retrained unconditional baseline.
+
+The same initial action noise, drawn three times with three different goals, produces three different paths. Stars mark the requested goals.
+
+![Same noise, different goals](figures/day6_same_noise_different_goals.png)
 
 At the fixed goal $(1, 0)$, both bend directions appear (positive midpoint share **47.46%** generated vs **49.87%** in demonstrations). Endpoint units are toy coordinates, not meters and not a success rate. No images, language, contact, or closed-loop control.
 

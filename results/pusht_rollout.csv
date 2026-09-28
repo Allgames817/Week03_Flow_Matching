@@ -1,0 +1,4 @@
+﻿seed,environment_steps,nfe,source_noise,max_reward,last_reward,terminated,truncated
+1000,300,4,gaussian,0.3028943581718423,0.04652137047462063,False,False
+1001,300,4,gaussian,0.0,0.0,False,False
+1002,300,4,gaussian,0.18549037848205113,0.0,False,False

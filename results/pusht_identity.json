@@ -1,0 +1,35 @@
+{
+  "image_interface": {
+    "source": "HRI image-based PushT example, commit 516e8e18875b27741bdbdb8a252e904032c90723",
+    "paper": "https://arxiv.org/html/2409.01083v5",
+    "dataset_role": "PushT image zarr used in the Week 2 checkout",
+    "frames": 25650,
+    "episodes": 206,
+    "eligible_windows": 24002,
+    "image_scale": "float_0_255_to_0_1",
+    "normalization": "all-demo min/max; not a held-out split",
+    "parameter_count_shape_check": 83755074,
+    "overfit": {
+      "scope": "REAL_DEMO_FIXED_MINIBATCH_OVERFIT",
+      "windows": [2270, 19872],
+      "optimizer": "AdamW",
+      "steps": 50,
+      "batch_size": 2,
+      "sample_nfe": 4,
+      "loss_step_1_train": 1.3473950624465942,
+      "loss_step_50_train_row": 0.0012080917367711663,
+      "final_fixed_loss_eval": 0.0010173895861953497,
+      "deployment_checkpoint_saved": false
+    }
+  },
+  "pretrained_rollout": {
+    "scope": "PRETRAINED_SIMULATED_PUSHT_ROLLOUT",
+    "checkpoint_sha256": "a4e16aebb2bcddc32846109dd7bd61a88d9f31bd0791357e76268958b5bd1096",
+    "source_noise": "gaussian",
+    "nfe": 4,
+    "episodes": 3,
+    "environment_steps": 300,
+    "paper_reproduced": false,
+    "real_robot_used": false
+  }
+}

@@ -22,7 +22,7 @@ There is no encoder that is dropped at test time, and the regression target is n
 
 ## 2. Probability path and conditional velocity
 
-Fix a coupling of noise $x_0$ and data $x_1$. This week uses an **independent** coupling: $x_0 \sim \mathcal{N}(0, I)$ drawn separately from $x_1$. That is not a solved optimal-transport pairing.
+Fix a coupling of noise $x_0$ and data $x_1$. The two-moons runs and the goal-chunk model use an **independent** coupling: $x_0 \sim \mathcal{N}(0, I)$ drawn separately from $x_1$. That is not a solved optimal-transport pairing. A later comparison keeps the same linear path and changes only the pairing; see [07_Coupling_and_Observation.md](07_Coupling_and_Observation.md).
 
 The conditional OT (CondOT) path used everywhere this week is linear in flow time $\tau \in [0, 1]$:
 

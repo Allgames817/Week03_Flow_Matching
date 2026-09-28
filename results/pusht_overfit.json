@@ -1,0 +1,48 @@
+{
+  "adapter_version": "day8-image-scale-fix2",
+  "scope": "REAL_DEMO_FIXED_MINIBATCH_OVERFIT",
+  "status": "PASS",
+  "actual_data_used": true,
+  "training_performed": true,
+  "backward_performed": true,
+  "optimizer_steps": 50,
+  "optimizer": "AdamW",
+  "optimizer_foreach": false,
+  "sample_start_indices": [
+    2270,
+    19872
+  ],
+  "initial_fixed_loss": 1.3473950624465942,
+  "final_fixed_loss": 0.0010173895861953497,
+  "loss_decreased": true,
+  "shapes": {
+    "image": [
+      2,
+      3,
+      96,
+      96
+    ],
+    "agent_pos": [
+      2,
+      2
+    ],
+    "condition": [
+      2,
+      514
+    ],
+    "x0_xt_ut_vt": [
+      2,
+      16,
+      2
+    ],
+    "generated_chunk": [
+      2,
+      16,
+      2
+    ]
+  },
+  "flow_nfe": 4,
+  "policy_quality_evaluated": false,
+  "rollout_performed": false,
+  "note": "PASS means finite forward/backward/sampling. Inspect loss_decreased separately. No trained deployment checkpoint is saved."
+}

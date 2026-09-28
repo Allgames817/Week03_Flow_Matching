@@ -1,8 +1,8 @@
 # Week 3 — Flow Matching
 
-Research note for VLA Roadmap Week 3. Numbers come from a local two-moons Flow Matching run, an official-API consistency check on that checkpoint, a fixed-checkpoint ODE solver / NFE study, and one goal-conditioned action-chunk model (copies under [`results/`](results/)). This is **not** a robot-policy benchmark and **not** a rerun of the official `examples/2d_flow_matching.ipynb`.
+Research note for VLA Roadmap Week 3. Numbers come from a local two-moons Flow Matching run, an official-API consistency check on that checkpoint, a fixed-checkpoint ODE solver / NFE study, one goal-conditioned action-chunk model, and a later pairing-plus-image-interface supplement (copies under [`results/`](results/)). This is **not** a robot-policy benchmark and **not** a rerun of the official `examples/2d_flow_matching.ipynb`.
 
-**Detail docs:** [01 Paper](01_FM_Paper.md) · [02 Architecture](02_FM_Architecture.md) · [03 Code Map](03_FM_Code_Map.md) · [04 Reproduction](04_Reproduction.md) · [05 Solver / NFE](05_Solver_NFE_Ablation.md) · [06 Conditional Actions](06_Conditional_Action.md) · [Source Index](results/SOURCE_INDEX.md)
+**Detail docs:** [01 Paper](01_FM_Paper.md) · [02 Architecture](02_FM_Architecture.md) · [03 Code Map](03_FM_Code_Map.md) · [04 Reproduction](04_Reproduction.md) · [05 Solver / NFE](05_Solver_NFE_Ablation.md) · [06 Conditional Actions](06_Conditional_Action.md) · [07 Coupling and Observation](07_Coupling_and_Observation.md) · [Source Index](results/SOURCE_INDEX.md)
 
 Chinese week conclusion: [`results/CONCLUSION_zh.md`](results/CONCLUSION_zh.md).
 
@@ -15,6 +15,7 @@ Chinese week conclusion: [`results/CONCLUSION_zh.md`](results/CONCLUSION_zh.md).
 - Show that Meta `flow_matching` 1.0.10 (`CondOTScheduler`, `AffineProbPath`, `ODESolver`) matches that hand-written path and Euler step on the **same** checkpoint.
 - On that frozen checkpoint, compare Euler / Midpoint / Heun3 at equal network evaluations.
 - Train a separate goal-conditioned model that generates a length-16 2-D action chunk.
+- Compare independent pairing with minibatch OT on a new two-moons pair of models, and check an image-conditioned PushT velocity interface on real demonstration windows.
 
 π₀ / OpenPI source reading is **deferred**. It is not part of this note.
 
@@ -189,7 +190,7 @@ Validation CFM MSE on a fixed 2048-example batch: **2.285278 → 0.299415**.
 
 The second error is about **22.18×** the first. The third returns to the first. The trajectory plot uses one shared noise batch and three requested goals (the stars). Together they support “the output follows the supplied goal,” which is stronger than “scrambling the condition breaks the model.” It is an input intervention on one conditional model, not a retrained unconditional baseline.
 
-At the fixed goal $(1, 0)$, both bend directions appear (positive midpoint share **47.46%** generated vs **49.87%** in demonstrations). Endpoint units are toy coordinates, not meters and not a success rate. No images, language, contact, or closed-loop control.
+At the fixed goal $(1, 0)$, both bend directions appear (positive midpoint share **47.46%** generated vs **49.87%** in demonstrations). Endpoint units are toy coordinates, not meters and not a success rate. This synthetic model has no images, language, contact, or closed-loop control.
 
 ![Same goal, different noise](figures/day6_same_goal_diversity.png)
 
@@ -197,23 +198,47 @@ Full write-up: [06_Conditional_Action.md](06_Conditional_Action.md).
 
 ---
 
-## 9. Main Findings
+## 9. Coupling and an Image-Conditioned Interface
+
+Two supplements. They keep the linear path $x_\tau=(1-\tau)x_0+\tau x_1$ and the label $x_1-x_0$.
+
+**Image-conditioned PushT.** The public HRI example (commit `516e8e18`) feeds a 512-D ResNet feature plus 2-D agent position into a velocity U-Net. The action chunk is `[B, 16, 2]`; inference builds 16 targets and executes 8. On two fixed real windows, 50 AdamW steps take the train-mode loss from **1.347** to **0.001208**, and the eval-mode loss on that same batch is **0.001017**. That is a fixed-batch overfit, not a PushT policy. An official checkpoint (SHA-256 `a4e16aeb…1096`), Gaussian source noise, NFE 4, three episodes of 300 steps: max rewards **0.303, 0.000, 0.185**. Those are not a success rate and not a comparison with Week 2’s low-dimensional Diffusion Policy.
+
+**Pairing.** TorchCFM 1.0.7, three training seeds, 2000 steps. Within a seed only the endpoint coupling changes. Minibatch OT transport cost on a 64-point diagnostic batch is **0.772**, against **3.355** for one random pairing.
+
+| NFE | CFM SWD2 | OT-CFM SWD2 |
+|---:|---:|---:|
+| 1 | 0.603 ± 0.008 | 0.077 ± 0.005 |
+| 4 | 0.187 ± 0.021 | 0.062 ± 0.004 |
+| 32 | 0.091 ± 0.007 | 0.066 ± 0.005 |
+
+OT-CFM reference trajectories are nearly straight (path length / displacement ≈ **1.00**). Independent CFM stays near **1.61–1.76**. Mean training time is about **1.82×** longer once OT pairing is included. The OT result is unconditional and 2-D. The matcher was not dropped into the image-conditioned training loop.
+
+![SWD2 vs NFE](figures/otcfm_swd2_vs_nfe.png)
+
+Full write-up: [07_Coupling_and_Observation.md](07_Coupling_and_Observation.md).
+
+---
+
+## 10. Main Findings
 
 1. **Training updates $\theta$ with a velocity label built from $x_1$; sampling updates $X$ and does not receive $x_1$.**
 2. On the local two-moons run, CFM validation MSE fell from **1.516** to **1.002** and stayed near 1. That is expected under conditional regression variance; it is not a distribution distance.
 3. **Handwritten CondOT interpolation and Euler match `flow_matching` 1.0.10** on this checkpoint (same-grid max abs diff 0). Agreement is an implementation check, not a better generative model.
 4. **ODE accuracy and sample-distribution quality are different measurements.** At equal NFE, Midpoint and Heun3 reduce endpoint RMSE by orders of magnitude while SWD2 sits near the high-accuracy ODE reference.
 5. **The chunk model uses its goal input.** A cyclic condition shift moves the endpoint to the new goal (error 0.0362) instead of the old one (error 0.8068), and both bend modes remain at $(1, 0)$.
+6. **Endpoint coupling changes low-NFE behavior.** On a paired two-moons comparison, minibatch OT-CFM reaches SWD2 ≈ 0.06 by NFE 2–4, while independent CFM is still near 0.19 at NFE 4. Training time is longer.
+7. **An image can enter $v_\theta$ as a condition without turning the exercise into a robot benchmark.** The PushT interface matches `[B, 16, 2]` chunks and a 514-D condition; the 50-step loss drop is a fixed minibatch.
 
 ---
 
-## 10. What This Week Leaves Open
+## 11. What This Week Leaves Open
 
-1. Image, language, and proprioceptive conditions (the π₀ / OpenPI reading that was deferred).
-2. Whether a flow head helps on the Week 1 or Week 2 control tasks under a matched protocol.
-3. Training-seed variance. Every table above is one trained model.
-4. Closed-loop execution, real time, and contact. The conditional model only accumulates toy displacements.
-5. What to change when SWD2 stalls: capacity, objective, data, or coupling. This week did not ablate those.
+1. Language conditions, and the π₀ / OpenPI reading that was deferred. The PushT image path is an interface check plus a fixed-batch overfit.
+2. A matched flow-versus-diffusion comparison on the same PushT protocol. Week 2 was low-dimensional; the rollout here is image-based and three episodes long.
+3. Whether minibatch OT still helps once the observation is tied to the action. The pairing result is unconditional and 2-D.
+4. Closed-loop contact and real time. The synthetic chunk model only accumulates toy displacements.
+5. Capacity and data when SWD2 stalls on the original frozen two-moons field. Coupling was measured on a new pair of models, not on that checkpoint.
 
 ---
 
@@ -225,7 +250,8 @@ Full write-up: [06_Conditional_Action.md](06_Conditional_Action.md).
 | API check | local `Week3_Day4/outputs/day4/`; numeric extract in [`results/day4_checks.json`](results/day4_checks.json) |
 | Solver run | local `Week3_Day5/outputs/day5/`; tables in [`results/`](results/) |
 | Conditional model | local `Week3_Day6/outputs/day6/`; tables in [`results/`](results/) |
-| Official library | installed `flow_matching` 1.0.10; local clone is for reading only |
+| Pairing study and PushT interface | local `Week3_Day8/outputs/`; tables in [`results/`](results/) |
+| Official libraries | `flow_matching` 1.0.10 for the earlier runs; TorchCFM 1.0.7 for the pairing study |
 | This note | `Week03_Flow_Matching/` |
 
-**Checkpoints, `.npz` sample dumps, the upstream source tree, and the two-moons notebook are not in this GitHub note.**
+**Checkpoints, the PushT `.pth`, `.npz` sample dumps, upstream source trees, and the two-moons notebook are not in this GitHub note.**

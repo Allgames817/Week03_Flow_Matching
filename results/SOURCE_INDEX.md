@@ -21,6 +21,7 @@ The evidence-pack CSV copies match the local run files byte for byte (SHA-256 be
 | Two-moons notebook / HTML preview | teaching bundle; CUDA metrics are the cited run |
 | Full per-step `loss.csv` | reduced to metrics JSON and the loss figures |
 | Solver-run `timings.csv` | medians already in `day5_summary.csv` |
+| OT-CFM `*.pt`, PushT `hri_pusht.pth` (~335 MB) | local weights |
 | OpenPI sources and notes | deferred |
 
 ---
@@ -31,6 +32,7 @@ The evidence-pack CSV copies match the local run files byte for byte (SHA-256 be
 |---|---|---|
 | Two-moons MLP; also the API-check and solver weights | `9da3ab2bf6a2aa623da6d2d5ff056b2b0cd4de332df581c1d6d55f648ce6f189` | `Week3_Day3/outputs/day3/flow_matching_day3.pt` |
 | Conditional chunk MLP | `c690234b069e1d514d64641ca1342da0e9a191ace350c59c04d9358492f09f8c` | `Week3_Day6/outputs/day6/run_20260927_004031_559009/conditional_flow.pt` |
+| Official image PushT weights (rollout only) | `a4e16aebb2bcddc32846109dd7bd61a88d9f31bd0791357e76268958b5bd1096` | `Week3_Day8/data/hri_pusht.pth` |
 
 Do not point the API check or the solver study at `Week3_Day3/reference_cpu_run/`. That directory is a different CPU process.
 
@@ -51,8 +53,17 @@ Do not point the API check or the solver study at `Week3_Day3/reference_cpu_run/
 | [`day6_mode_coverage.csv`](day6_mode_coverage.csv) | same run | `e4686f895be33180a434d019dfe98f940c2b76198905546d12e4ea4ce564798a` |
 | [`day6_per_seed_metrics.csv`](day6_per_seed_metrics.csv) | same run | |
 | [`day6_identity.json`](day6_identity.json) | fields from that run’s `run_metadata.json` | |
+| [`otcfm_aggregate.csv`](otcfm_aggregate.csv) | `Week3_Day8/outputs/otcfm_full/aggregate.csv` | |
+| [`otcfm_summary.csv`](otcfm_summary.csv) | same run, per seed | |
+| [`otcfm_pairing.json`](otcfm_pairing.json) | same run | |
+| [`otcfm_identity.json`](otcfm_identity.json) | config fields; site-packages path removed | |
+| [`pusht_overfit.json`](pusht_overfit.json) | `Week3_Day8/outputs/robot_train_smoke_fix2/robot_smoke.json` | |
+| [`pusht_overfit_loss.csv`](pusht_overfit_loss.csv) | same run, `loss.csv` | |
+| [`pusht_rollout.csv`](pusht_rollout.csv) | `Week3_Day8/outputs/robot_rollout_nfe4/rollout.csv` | |
+| [`pusht_identity.json`](pusht_identity.json) | dataset counts, overfit losses, checkpoint SHA-256 | |
+| [`pusht_rollouts/`](pusht_rollouts/) | three GIFs from that rollout | |
 
-The solver and conditional-model summary hashes match the evidence pack (`evidence_manifest.json` on the author machine).
+The solver and conditional-model summary hashes match the evidence pack (`evidence_manifest.json` on the author machine). The pairing and PushT files are copies of the local `Week3_Day8` runs. Smoke directories are not the cited results.
 
 ---
 
@@ -89,6 +100,10 @@ All figures are copies of the local run PNGs, not redraws.
 | `figures/day6_same_goal_diversity.png` | conditional-model run folder |
 | `figures/day6_same_noise_different_goals.png` | conditional-model run folder |
 | `figures/day6_mode_histogram.png` | conditional-model run folder |
+| `figures/otcfm_swd2_vs_nfe.png` | `Week3_Day8/outputs/otcfm_full/` |
+| `figures/otcfm_pairing_random.png` | same run |
+| `figures/otcfm_pairing_minibatch_ot.png` | same run |
+| `figures/pusht_overfit_loss.png` | `Week3_Day8/outputs/robot_train_smoke_fix2/loss_curve.png` |
 
 ---
 
@@ -102,6 +117,10 @@ All figures are copies of the local run PNGs, not redraws.
 | 0.036374, 0.806758, 0.036224 | full floats in the CSV | [`day6_summary.csv`](day6_summary.csv) |
 | 22.18× | 22.17923… | ratio in Section 4 |
 | 47.46% / 49.87% | fractions in doc 06 | mode CSV means |
+| Pairing SWD 0.603 / 0.077 / 0.187 / 0.062 / 0.091 / 0.066 | 3-decimal means | [`otcfm_aggregate.csv`](otcfm_aggregate.csv) |
+| 0.772, 3.355 | pairing costs | [`otcfm_pairing.json`](otcfm_pairing.json) |
+| 1.347 → 0.001208, eval 0.001017 | overfit losses | [`pusht_overfit.json`](pusht_overfit.json), [`pusht_overfit_loss.csv`](pusht_overfit_loss.csv) |
+| max reward 0.303, 0.000, 0.185 | 3 decimals | [`pusht_rollout.csv`](pusht_rollout.csv) |
 
 ---
 
@@ -127,3 +146,7 @@ All figures are copies of the local run PNGs, not redraws.
 | `Week3_Day6/outputs/day6/run_20260927_004031_559009/` | cited conditional run |
 | `flow_matching/` | local clone for reading; runtime was the installed 1.0.10 wheel |
 | `Week3_Day7/` | week summary and evidence pack; OpenPI notes not imported |
+| `Week3_Day8/outputs/otcfm_full/` | cited CFM vs minibatch OT-CFM run |
+| `Week3_Day8/outputs/robot_train_smoke_fix2/` | cited fixed-minibatch overfit |
+| `Week3_Day8/outputs/robot_rollout_nfe4/` | cited official-weight rollout |
+| `Week3_Day8/data/hri_pusht.pth` | official weights; not copied here |

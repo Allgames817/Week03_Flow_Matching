@@ -127,3 +127,5 @@ Two different “times” show up in the same tensor:
 | Test-time iteration | optional temporal aggregation | $K$ denoising steps | $K$ ODE steps |
 
 The action-chunk horizon 16 matches Week 2’s prediction window only as a number. The observation, action semantics, dataset, and simulator are different, so the horizons are not a matched ablation.
+
+A later image-conditioned PushT interface uses a different condition: a 512-D image feature plus 2-D agent position, and it executes 8 of the 16 predicted targets. That wiring, and a separate minibatch-OT pairing study, are in [07_Coupling_and_Observation.md](07_Coupling_and_Observation.md). The table above describes the synthetic goal-chunk model.

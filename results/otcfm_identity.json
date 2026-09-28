@@ -1,0 +1,22 @@
+{
+  "role": "Paired unconditional 2-D comparison: independent CFM vs minibatch OT-CFM",
+  "status": "COMPLETE",
+  "library": "torchcfm 1.0.7",
+  "matchers": ["ConditionalFlowMatcher(sigma=0)", "ExactOptimalTransportConditionalFlowMatcher(sigma=0)"],
+  "python": "3.10.21",
+  "torch": "2.1.2+cu121",
+  "numpy": "1.26.4",
+  "POT": "0.9.5",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "steps": 2000,
+  "batch_size": 128,
+  "width": 128,
+  "lr": 0.001,
+  "seeds": [0, 1, 2],
+  "eval_samples": 1024,
+  "nfes": [1, 2, 4, 8, 16, 32],
+  "ref_steps": 128,
+  "held_fixed_within_seed": ["initial weights", "raw x0/x1/t batches", "optimizer", "evaluation noise", "target samples", "SWD projection directions"],
+  "independent_variable": "endpoint coupling only"
+}

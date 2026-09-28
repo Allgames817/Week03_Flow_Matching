@@ -1,5 +1,6 @@
 # Weights and large arrays stay on the author machine (GitHub file limits / note-only repo).
 *.pt
+*.pth
 *.npz
 __pycache__/
 .ipynb_checkpoints/

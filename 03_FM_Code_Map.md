@@ -116,7 +116,28 @@ Default `--backend official` raises if `flow_matching` cannot be imported. `--ba
 
 ---
 
-## 6. What is intentionally absent
+## 6. Pairing study and image-conditioned PushT
+
+Scripts stay in local `Week3_Day8/`. This note does not vendor [HRI-EU/flow_matching](https://github.com/HRI-EU/flow_matching) or [atong01/conditional-flow-matching](https://github.com/atong01/conditional-flow-matching).
+
+```
+day8_otcfm.py
+  ConditionalFlowMatcher(sigma=0)
+  vs ExactOptimalTransportConditionalFlowMatcher(sigma=0)
+  same linear path; OT only resamples the pairing
+
+day8_robot_flow.py
+  load HRI unet.py / resnet.py by explicit path
+  image + agent_pos → obs_cond [B, 514]
+  velocity target on action chunks [B, 16, 2]
+  modes: shape, data-check, train-smoke, rollout
+```
+
+The OT matcher is not wired into the image-conditioned loop. OT would reorder $x_1$, so the observation attached to that action would have to move with it.
+
+---
+
+## 7. What is intentionally absent
 
 | Item | Reason |
 |---|---|
@@ -124,4 +145,5 @@ Default `--backend official` raises if `flow_matching` cannot be imported. `--ba
 | `*.pt` checkpoints | local weights; identified by SHA-256 |
 | `*.npz` sample dumps | large; plots and CSV summaries are the note |
 | Two-moons notebook and HTML preview | teaching bundle; metrics cited from the CUDA script run |
+| HRI and TorchCFM source trees, `hri_pusht.pth` | local only; cited by commit and SHA-256 |
 | OpenPI source reading | deferred; not part of this note |

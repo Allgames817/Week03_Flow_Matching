@@ -1,0 +1,8 @@
+{
+  "batch_size": 64,
+  "random_pair_cost": 3.3551527376828743,
+  "independent_plan_expected_cost": 3.0012030404937944,
+  "minibatch_ot_plan_cost": 0.7717858516681324,
+  "cost": "squared Euclidean distance",
+  "note": "This inequality concerns the exact finite-batch plan; it is NOT a sample-quality guarantee."
+}
